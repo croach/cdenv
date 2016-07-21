@@ -3,41 +3,40 @@
 # My thanks to Creationix. This script is almost a verbatim copy of
 # the install script for NVM (https://github.com/creationix/nvm).
 
-NENV_DIR="$HOME/.cdenv"
+CDENV_DIR="$HOME/.cdenv"
 GITHUB_REPO_URL="https://github.com/croach/cdenv.git"
 NENV_RAW_FILE_URL="https://raw.github.com/croach/cdenv/master/cdenv.sh"
 
 if ! hash git 2>/dev/null; then
-  if [ -d "$NENV_DIR" ]; then
-    echo "=> cdenv is already installed in $NENV_DIR, trying to update"
+  if [ -d "$CDENV_DIR" ]; then
+    echo "=> cdenv is already installed in $CDENV_DIR, trying to update"
     echo -ne "\r=> "
-    cd $NENV_DIR && rm cdenv.sh && curl -O $NENV_RAW_FILE_URL
+    cd $CDENV_DIR && rm cdenv.sh && curl -O $NENV_RAW_FILE_URL
   else
-    # Cloning to $NENV_DIR
-    mkdir "$NENV_DIR" && cd "$NENV_DIR" && curl -O $NENV_RAW_FILE_URL
+    # Cloning to $CDENV_DIR
+    mkdir "$CDENV_DIR" && cd "$CDENV_DIR" && curl -O $NENV_RAW_FILE_URL
   fi
 else
-  if [ -d "$NENV_DIR" ]; then
-    echo "=> cdenv is already installed in $NENV_DIR, trying to update"
+  if [ -d "$CDENV_DIR" ]; then
+    echo "=> cdenv is already installed in $CDENV_DIR, trying to update"
     echo -ne "\r=> "
-    cd $NENV_DIR && git pull
+    cd $CDENV_DIR && git pull
   else
-    # Cloning to $NENV_DIR
-    git clone $GITHUB_REPO_URL $NENV_DIR
+    # Cloning to $CDENV_DIR
+    git clone $GITHUB_REPO_URL $CDENV_DIR
   fi
 fi
 
-# Detect profile file
-if [ ! -z "$1" ]; then
-  PROFILE="$1"
-else
-  if [ -f "$HOME/.bashrc" ]; then
-    PROFILE="$HOME/.bashrc"
-  elif [ -f "$HOME/.zshrc" ]; then
-    PROFILE="$HOME/.zshrc"
-  elif [ -f "$HOME/.profile" ]; then
-    PROFILE="$HOME/.profile"
-  fi
+# Get the name of the user's current shell
+shell="$(basename $SHELL)"
+
+# Detect profile file for the user's shell
+if [ -f "$HOME/.${shell}rc" ]; then
+  PROFILE="$HOME/.${shell}rc"
+elif [ -f "$HOME/.${shell}_profile" ]; then
+  PROFILE = "$HOME/.${shell}_profile"
+elif [ -f "$HOME/.profile" ]; then
+  PROFILE="$HOME/.profile"
 fi
 
 SOURCE_STR=$(cat <<EOF
