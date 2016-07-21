@@ -34,12 +34,8 @@
 #
 # Created by Christopher Roach <croach@madebyglitch.com>
 
-
-_cdenv_help() {
-    # TODO: Take a command name as an argument and print detailed info on how
-    # to use the command.
-    echo
-    echo "Simple Virtual Environment Manager"
+# Prints general usage information
+_cdenv_usage() {
     echo
     echo "Usage:"
     echo "    cdenv help             Show this message"
@@ -47,6 +43,44 @@ _cdenv_help() {
     echo "    cdenv deactivate       Deactivate the current virtual environment"
     echo "    cdenv home             Change directory to the current virtual environement's directory"
     echo
+}
+
+# Prints help text based on the given command
+_cdenv_help() {
+    case "$1" in
+        "help" )
+            echo "Shows this help text"
+            _cdenv_usage
+            ;;
+        "activate" )
+            echo "usage: cdenv activate <environment_directory> <auto_deactivate>"
+            echo
+            echo "Activate the given environment. If <environment_directory> is given, source that directory's "
+            echo ".activate file. Otherwise, try to source the .activate file in the current directory. If "
+            echo "the <auto_deactivate> parameter is set (it can be set to anything), the activated environment"
+            echo "will be deactivated when the CDENV_HOME directory is left."
+            echo
+            echo "Parameters:"
+            echo
+            echo "    environment_directory    the location of the virtual environment to activate"
+            echo "    auto_deactivate          set this parameter to automically deactivate the current environment "
+            echo "                             when the home directory is left"
+            ;;
+        "deactivate" )
+            echo "usage: cdenv deactivate"
+            echo
+            echo "Deactivate the currently active virtual environment"
+            ;;
+        "home" )
+            echo "usage: cdenv home"
+            echo
+            echo "Change the working directory to the currently activated environment's home directory"
+            ;;
+        * )
+            echo "Simple Virtual Environment Manager"
+            _cdenv_usage
+            ;;
+    esac
 }
 
 # This function is meant to replace the builtin 'cd' function. Using
@@ -166,7 +200,6 @@ _cdenv_deactivate() {
     fi
 }
 
-
 cdenv() {
     if [ $# -lt 1 ]; then
         cdenv help
@@ -175,7 +208,7 @@ cdenv() {
 
     case $1 in
         "help" )
-            shift && _cdenv_help
+            shift && _cdenv_help "$@"
             ;;
         "activate" )
             shift && _cdenv_activate "$@"
@@ -192,11 +225,10 @@ cdenv() {
     esac
 }
 
-
 # Setup bash and zsh command completion
 _cdenv_command_completion() {
     local cur
-    local commands="help home activate deactivate ls"
+    local commands="help home activate deactivate"
 
     cur="${COMP_WORDS[COMP_CWORD]}"
 
