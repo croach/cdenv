@@ -98,7 +98,7 @@ _cdenv_help() {
 # virtual environments.
 #
 _cdenv_cd() {
-    builtin cd "$@"
+    builtin cd "$1"
 
     # Make sure that an environment does exist and that the new
     # directory is not a subdirectory of the environment directory and
@@ -111,7 +111,7 @@ _cdenv_cd() {
     # Make sure a virtual environment doesn't already exist before creating a
     # new one.
     if ! _cdenv_exists ; then
-        cdenv activate
+        cdenv activate "$@"
     fi
 }
 
@@ -213,7 +213,7 @@ cdenv() {
             builtin cd "$CDENV_HOME"
             ;;
         * )
-            _cdenv_cd "$@"
+            _cdenv_cd "$@" 'auto-deactivate'
             ;;
     esac
 }
