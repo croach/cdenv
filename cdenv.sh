@@ -110,12 +110,12 @@ _cdenv_activate() {
 	# If the second arg is a directory, assume that it's the directory
 	# of the virtual environment. Otherwise, it will be the
 	# auto_deactivate argument.
-	if [ -d "$2" ]; then
-		local cdenv_home="$(builtin cd $2; pwd)"
-		local cdenv_auto_deactivate="${3+true}"
+	if [ -d "$1" ]; then
+		local cdenv_home="$(builtin cd $1; pwd)"
+		local cdenv_auto_deactivate="${2+true}"
 	else
 		local cdenv_home="$PWD"
-		local cdenv_auto_deactivate="${2+true}"
+		local cdenv_auto_deactivate="${1+true}"
 	fi
 
     # Check if the directory we've cd'ed into is a virtual environment
@@ -175,13 +175,13 @@ cdenv() {
 
     case $1 in
         "help" )
-            _cdenv_help
+            shift && _cdenv_help
             ;;
         "activate" )
-            _cdenv_activate "$@"
+            shift && _cdenv_activate "$@"
             ;;
         "deactivate" )
-            _cdenv_deactivate
+            shift && _cdenv_deactivate
             ;;
         "home" )
             builtin cd "$CDENV_HOME"
