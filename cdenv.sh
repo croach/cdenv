@@ -36,6 +36,8 @@
 
 
 _cdenv_help() {
+    # TODO: Take a command name as an argument and print detailed info on how
+    # to use the command.
     echo
     echo "Simple Virtual Environment Manager"
     echo
@@ -76,14 +78,8 @@ _cdenv_cd() {
     # new one.
     if ! _cdenv_exists ; then
         cdenv activate
-
-		# Set the auto-deactivate variable to make sure the virtual
-		# environment is deactivated when we leave the parent
-		# directory
-		export CDENV_AUTO_DEACTIVATE=true
     fi
 }
-
 
 # Returns true if a virtual environment is currently active
 _cdenv_exists() {
@@ -110,16 +106,31 @@ _cdenv_name() {
 
 # Activates a new environment
 _cdenv_activate() {
+
+	# If the second arg is a directory, assume that it's the directory
+	# of the virtual environment. Otherwise, it will be the
+	# auto_deactivate argument.
+	if [ -d "$2" ]; then
+		local cdenv_home="$(builtin cd $2; pwd)"
+		local cdenv_auto_deactivate="${3+true}"
+	else
+		local cdenv_home="$PWD"
+		local cdenv_auto_deactivate="${2+true}"
+	fi
+
     # Check if the directory we've cd'ed into is a virtual environment
     # directory (i.e., it contains a .activate file) before trying to
     # activate it
-    if [ -f ".activate" ]; then
+    echo "$cdenv_home"
+    if [ -f "$cdenv_home/.activate" ]; then
 
-        # An environment is essentially nothing more than an
-        # environment variable (CDENV_HOME) pointing to the parent
-        # directory of our virtual environment. Create the variable
-        # and point it to $PWD.
-        export CDENV_HOME="$PWD"
+		# Since we found an activate virtual environment, we can now
+		# export the local HOME and AUTO_DEACTIVATE variables
+        export CDENV_HOME="$cdenv_home"
+		export CDENV_AUTO_DEACTIVATE="$cdenv_auto_deactivate"
+
+        echo "CDENV_HOME: $CDENV_HOME"
+        echo "CDENV_AUTO_DEACTIVATE: $CDENV_AUTO_DEACTIVATE"
 
         # Update the prompt to show that we are in a virtual
         # environment
@@ -127,7 +138,8 @@ _cdenv_activate() {
         export PS1="($(_cdenv_name))$PS1"
 
 		# Activate the new virtual environment
-		source .activate
+        echo "Activating..."
+		source "$CDENV_HOME/.activate"
     fi
 }
 
@@ -166,7 +178,7 @@ cdenv() {
             _cdenv_help
             ;;
         "activate" )
-            _cdenv_activate
+            _cdenv_activate "$@"
             ;;
         "deactivate" )
             _cdenv_deactivate
