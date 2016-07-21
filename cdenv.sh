@@ -163,16 +163,13 @@ _cdenv_activate() {
         export CDENV_HOME="$cdenv_home"
 		export CDENV_AUTO_DEACTIVATE="$cdenv_auto_deactivate"
 
-        echo "CDENV_HOME: $CDENV_HOME"
-        echo "CDENV_AUTO_DEACTIVATE: $CDENV_AUTO_DEACTIVATE"
-
         # Update the prompt to show that we are in a virtual
         # environment
         export CDENV_OLD_PS1="$PS1"
         export PS1="($(_cdenv_name))$PS1"
 
 		# Activate the new virtual environment
-        echo "Activating..."
+        echo "Activating ($(_cdenv_name))..."
 		source "$CDENV_HOME/.activate"
     fi
 }
@@ -183,7 +180,7 @@ _cdenv_deactivate() {
     # deactivate it
     if _cdenv_exists ; then
 
-		echo "Deactivating ($(_cdenv_name))"
+		echo "Deactivating ($(_cdenv_name))..."
 
         # Run the deactivation script if it exists
         if [[ -e "$CDENV_HOME/.deactivate" ]]; then
