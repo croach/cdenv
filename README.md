@@ -10,13 +10,13 @@ teardown scripts for the environment, if they exist.
 To install, run the following line if you use curl:
 
 ```
-curl https://raw.github.com/croach/cdenv/master/install.sh | sh
+curl https://raw.githubusercontent.com/croach/cdenv/master/install.sh | sh
 ```
 
 or this line if you use wget:
 
 ```
-wget -qO- https://raw.github.com/croach/cdenv/master/install.sh | sh
+wget -qO- https://raw.githubusercontent.com/croach/cdenv/master/install.sh | sh
 ```
 
 > NOTE: The script will clone this repository (or curl the cdenv.sh file) into

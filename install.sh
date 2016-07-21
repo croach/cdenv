@@ -5,7 +5,7 @@
 
 CDENV_DIR="$HOME/.cdenv"
 GITHUB_REPO_URL="https://github.com/croach/cdenv.git"
-NENV_RAW_FILE_URL="https://raw.github.com/croach/cdenv/master/cdenv.sh"
+NENV_RAW_FILE_URL="https://raw.githubusercontent.com/croach/cdenv/master/cdenv.sh"
 
 if ! hash git 2>/dev/null; then
   if [ -d "$CDENV_DIR" ]; then
