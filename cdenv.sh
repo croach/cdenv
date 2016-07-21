@@ -155,7 +155,6 @@ _cdenv_activate() {
     # Check if the directory we've cd'ed into is a virtual environment
     # directory (i.e., it contains a .activate file) before trying to
     # activate it
-    echo "$cdenv_home"
     if [ -f "$cdenv_home/.activate" ]; then
 
 		# Since we found an activate virtual environment, we can now
@@ -169,7 +168,6 @@ _cdenv_activate() {
         export PS1="($(_cdenv_name))$PS1"
 
 		# Activate the new virtual environment
-        echo "Activating ($(_cdenv_name))..."
 		source "$CDENV_HOME/.activate"
     fi
 }
@@ -179,8 +177,6 @@ _cdenv_deactivate() {
     # Make sure that an environment does exist before we try to
     # deactivate it
     if _cdenv_exists ; then
-
-		echo "Deactivating ($(_cdenv_name))..."
 
         # Run the deactivation script if it exists
         if [[ -e "$CDENV_HOME/.deactivate" ]]; then
