@@ -102,6 +102,10 @@ _cdenv_cd() {
 	# user's home directory
 	if [ -n "${1+set}" ]; then
 		builtin cd "$1"
+		# Since we've already cd'ed into the given directory, shift
+		# (i.e., remove) the path from the list of given command line
+		# arguments
+		shift
 	else
 		builtin cd
 	fi
