@@ -98,7 +98,13 @@ _cdenv_help() {
 # virtual environments.
 #
 _cdenv_cd() {
-    builtin cd "$1"
+	# If a path was given, cd into that, otherwise, just cd into the
+	# user's home directory
+	if [ -n "${1+set}" ]; then
+		builtin cd "$1"
+	else
+		builtin cd
+	fi
 
     # Make sure that an environment does exist and that the new
     # directory is not a subdirectory of the environment directory and
@@ -122,7 +128,7 @@ _cdenv_exists() {
 
 # Returns true if the auto-deactivate feature is on
 _cdenv_auto_deactivate() {
-	[ -n "${CDENV_AUTO_DEACTIVATE}" ];
+	[ -n "${CDENV_AUTO_DEACTIVATE}+set" ];
 }
 
 # Returns true if the current directory is a subdirectory of the
